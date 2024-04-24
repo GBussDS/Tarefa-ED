@@ -28,14 +28,36 @@ int main()
     Node* head = nullptr;
     displayList(head);
     cout << "==============" << endl;
-    insertEnd(&head,0);
-    insertEnd(&head,1);
-    insertEnd(&head,3);
-    insertEnd(&head,7);
-    insertEnd(&head,10);
-    insertEnd(&head,13);
+
+    // Inserção no fim da lista
+    insertEnd(&head, 20);
+    insertEnd(&head, 30);
     displayList(head);
     cout << "==============" << endl;
+
+    // Inserção no início da lista
+    insertFront(&head, 10);
+    insertFront(&head, 5);
+    displayList(head);
+    cout << "==============" << endl;
+
+    // Inserção após um nó específico
+    Node* nodeToInsertAfter = searchNodebyValue(head, 20);
+    insertAfter(nodeToInsertAfter, 25);
+    displayList(head);
+    cout << "==============" << endl;
+    
+    // Inserção antes de um nó específico
+    Node* nodeToInsertBefore = searchNodebyValue(head, 30);
+    insertBefore(nodeToInsertBefore, 27);
+    displayList(head);
+    cout << "==============" << endl;
+    
+    // Exclusão de um nó por valor
+    deleteNodebyValue(&head, 10);
+    displayList(head);
+    cout << "==============" << endl;
+    
     return 0;
 }
 
@@ -56,7 +78,7 @@ void displayList(Node* node)
     if (node == nullptr)
     {
         cout << "Lista vazia: Não é possível realizar displayList" << endl;
-        return; //Usa return pra sair da função, o resto do código não será executado
+        return; // Usa return pra sair da função, o resto do código não será executado
     }
     
     if  (node -> ptrPrev != nullptr)
@@ -97,11 +119,11 @@ void insertFront(Node** head, int iPayload)
 void insertEnd(Node** head, int iPayload)
 {
   Node* newNode = createNode(iPayload);
-  //newNode -> ptrNext = nullptr;
+  // newNode -> ptrNext = nullptr;
   
   if (*head == nullptr)
   {
-      //newNode -> ptrNext = nullptr; Essa linha não é obrigatória pois já definimos anteriormente
+      // newNode -> ptrNext = nullptr;
       (*head) = newNode;
       return;
       
@@ -109,11 +131,11 @@ void insertEnd(Node** head, int iPayload)
   
   Node* temp = (*head);
   
-  //Percorremos a lista até seu fim(ptrNext do ultimo nó é NULL)
+  // Percorremos a lista até seu fim(ptrNext do ultimo nó é NULL)
   while(temp->ptrNext != nullptr) temp = temp->ptrNext;
   
-  newNode->ptrPrev = temp; //newNode aponta para o fim da lista
-  temp->ptrNext = newNode; //Antigo último elemento aponta para o novo nó
+  newNode->ptrPrev = temp; // newNode aponta para o fim da lista
+  temp->ptrNext = newNode; // Antigo último elemento aponta para o novo nó
 }
 
 void insertAfter(Node* ptrLocation, int iPayload)
@@ -178,32 +200,34 @@ void insertBefore(Node* ptrLocation, int iPayload)
 // Exercício 3. Elaborar a função Node* searchNodebyValue(node*, int);
 Node* searchNodebyValue(Node* head, int iValue)
 {
-    if (ptrLocation == nullptr)
+    if (head == nullptr)
     {
-        cout << "Location é NULL." << endl;
-        return;
+        cout << "Lista vazia." << endl;
+        return nullptr;
     }
 
     Node* temp = head;
 
     while (temp != nullptr)
     {
-        if (temp->iPayload == iValue) break;
+        if (temp->iPayload == iValue) return temp;
         temp = temp->ptrNext;
     }
 
-    return temp;
+    cout << "Valor não encontrado na lista." << endl;
+    return nullptr;
 }
 
-// Exercício 2. Elaborar a função void deleteNodebyValue(Node**, int); // Se tiver duas ocorrências, apaga a primeira mesmo
+// Exercício 2. Elaborar a função void deleteNodebyValue(Node**, int); 
+// Se tiver duas ocorrências, apaga a primeira
 void deleteNodebyValue(Node** head, int iValue)
 {
     if (*head == nullptr)
     {
-        cout << "Não foi posível remover." << endl;
+        cout << "Lista vazia." << endl;
         return;
     }
 
-    Node* toRemove = searchNodebyValue(*head, iValue)
-    deleteNode(head, toRemove);
+    Node* toRemove = searchNodebyValue(*head, iValue);
+    if (toRemove != nullptr) deleteNode(head, toRemove);
 }
